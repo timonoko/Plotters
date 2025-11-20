@@ -1,0 +1,2 @@
+rm -f /media/tnoko/A87B-A154/*
+cp gcode.gcode /media/tnoko/A87B-A154/

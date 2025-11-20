@@ -1,0 +1,6 @@
+./gcodegen.py $1 $2 975 2400 5000
+./laseri send
+./gcodegen.py $1 $2 200 2400 5000
+./laseri send
+
+
