@@ -57,7 +57,7 @@ def wait_when_busy():
     any=False
     while query_motors() != b'QM,0,0,0\n\r':
         any=True
-        print('.',end='')
+        print('W',end='')
     if any: print()
 
 def Free(x=True):
@@ -74,10 +74,12 @@ MOVES=0
 def Stepper_Move(duration,Steps1,Steps2):
     global MOVES
     MOVES+=1
+    print("MOVES=",MOVES)
     if MOVES>10:
         wait_when_busy()
         MOVES=0
     duration,Steps1,Steps2=(str(int(duration)),str(int(Steps1)),str(int(Steps2)))
+    print("SM,{},{},{}\r".format(duration,Steps1,Steps2))
     ser.write(bytes("SM,{},{},{}\r".format(duration,Steps1,Steps2),encoding='UTF-8'))
 
 def sign(x):
@@ -88,7 +90,7 @@ def sign(x):
 def smooth(duration,x,y):
     Stepper_Move(duration,x+y,x-y)
         
-Klappispeed=100        
+Klappispeed=0        
 Klappikorjaus=0 # 100
 Klappikorjaukset=0  # Piirturissa on x-suunnassa klappia
 vanhempisuunta=0
@@ -101,15 +103,15 @@ def Move_Rel(x,y):
 #    y=round(y*20/20.7)
     duration=int((abs(x)+abs(y))/PEN_SPEED)
     if PEN_UP: duration=int(duration/4)
-    if duration<100: duration=100
-    if  sign(x)!=sign(vanhasuunta) and (not PEN_UP):
-        if vanhasuunta!=0 or sign(vanhempisuunta)!=sign(x):
-            z=sign(x)*Klappikorjaus
-            Stepper_Move(Klappispeed,z,z)
-            Klappikorjaukset+=z
+#    if duration<100: duration=100
+#    if  sign(x)!=sign(vanhasuunta) and (not PEN_UP):
+#        if vanhasuunta!=0 or sign(vanhempisuunta)!=sign(x):
+#            z=sign(x)*Klappikorjaus
+#            Stepper_Move(Klappispeed,z,z)
+#            Klappikorjaukset+=z
     smooth(duration,x,y)
-    vanhempisuunta=vanhasuunta
-    vanhasuunta=x
+#    vanhempisuunta=vanhasuunta
+#    vanhasuunta=x
 
 def Move(x,y):
     global X_NOW,Y_NOW
@@ -135,10 +137,11 @@ def Pen(x='UP'):
 #        ser.write(b'SP,1,800\r')
         ser.write(b'SP,1,400\r')
     if x=='DOWN':
-        wait_when_busy()
-        MOVES=0
-        PEN_UP=False
-        ser.write(b'SP,0,500\r')
+        if PEN_UP:
+            wait_when_busy()
+            MOVES=0
+            PEN_UP=False
+            ser.write(b'SP,0,500\r')
     if type(x)==type(1): # Numeerinen kynän asento 0-100
         wait_when_busy()
         ser.write(bytes("SC,4,{}\r".format(int(10000+(100-x)*100)),encoding='UTF-8'))

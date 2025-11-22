@@ -1,1 +1,2 @@
-python3 plotgcode.py gcode.gcode
+python3 plotgcode.py $1
+
