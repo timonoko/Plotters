@@ -8,7 +8,7 @@ except: F=open('gcode.gcode','r')
 try: POWER=sys.argv[2]    
 except: POWER=975
 try: SPEED=sys.argv[3]    
-except: SPEED=2400
+except: SPEED=600
 try: FSPEED=sys.argv[4]    
 except: FSPEED=2400
   
@@ -30,8 +30,8 @@ while s:
                 print(s)
         elif s.find('01')==1:
             if s.find('Z')==4:
-                print('M3 S'+str(SPEED))
-                print('G01 F'+str(POWER))
+                print('M3 S'+str(POWER))
+                print('G01 F'+str(SPEED))
         else: print(s)
     else:
         print(s)
