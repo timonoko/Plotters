@@ -1,7 +1,5 @@
-cd /home/tnoko/Plotters
 echo laseri gen = output to "gcode.gcode"
 echo laser send = send "gcode.gcode" to laser
 echo laseri con = output directly to laser
-python3 -i nokolaser.py $1 $2 $3
-
+python3 -i /home/tnoko/Plotters/nokolaser.py $1 $2 $3
 
