@@ -1,1 +1,1 @@
-All other plotters and lasercutters related stuff are hereby depreciated.
+Gcodegen.py = generate GCODE from countours. Made by Gemini.
